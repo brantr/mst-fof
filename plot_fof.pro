@@ -109,10 +109,17 @@ endif else begin
   ymax = zmax
 endelse
 
+xmin = 0
+xmax = 1.
+ymin = 0.
+ymax = 1.
+zmin = 0.
+zmax = 1.
+
 test = set_psym_circle()
 device,decompose=0
 window,1,xsize=600,ysize=600
-plot,[0],[0],xrange=[ymin,ymax],yrange=[zmin,zmax],xstyle=1,ystyle=1
+plot,[0],[0],xrange=[ymin,ymax],yrange=[zmin,zmax],xstyle=1,ystyle=1,xtitle='y',ytitle='z'
 xx = fltarr(2)
 yy = fltarr(2)
 for i=0,nst-1 do begin
@@ -143,7 +150,7 @@ oplot,y(1,*),y(2,*),psym=8,symsize=ss
 
 
 window,0,xsize=600,ysize=600
-plot,[0],[0],xrange=[xmin,xmax],yrange=[ymin,ymax],xstyle=1,ystyle=1
+plot,[0],[0],xrange=[xmin,xmax],yrange=[ymin,ymax],xstyle=1,ystyle=1,xtitle='x',ytitle='y'
 xx = fltarr(2)
 yy = fltarr(2)
 for i=0,nst-1 do begin
@@ -171,6 +178,37 @@ endfor
 loadct,0,/silent
 oplot,x(0,*),x(1,*),psym=8,symsize=ss
 oplot,y(0,*),y(1,*),psym=8,symsize=ss
+
+
+window,2,xsize=600,ysize=600
+plot,[0],[0],xrange=[xmin,xmax],yrange=[zmin,zmax],xstyle=1,ystyle=1,xtitle='x',ytitle='z'
+xx = fltarr(2)
+yy = fltarr(2)
+for i=0,nst-1 do begin
+  xx(0) = xst(0,i)
+  xx(1) = yst(0,i)
+  yy(0) = xst(2,i)
+  yy(1) = yst(2,i)
+  ;oplot,xx,yy
+endfor
+loadct,13,/silent
+for i=0,n-1 do begin
+  xx(0) = x(0,i)
+  xx(1) = y(0,i)
+  yy(0) = x(2,i)
+  yy(1) = y(2,i)
+  ;oplot,xx,yy,color = (255.-40.)*float(i)/float(n-1)+40., thick=3
+  if ngroups gt 1 then begin
+    cc =  (255.-40.)*(grank(i)-min(grank))/(max(grank)-min(grank))+40.
+  endif else begin
+    cc = 255
+  endelse
+  oplot,xx,yy,color =cc, thick=3
+
+endfor
+loadct,0,/silent
+oplot,x(0,*),x(2,*),psym=8,symsize=ss
+oplot,y(0,*),y(2,*),psym=8,symsize=ss
 
 ;for i=0,n-1 do begin
 ;  print,idxA(i),idxB(i)

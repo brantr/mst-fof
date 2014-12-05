@@ -1,5 +1,6 @@
 #include "load_particles.hpp"
 #include "rng.h"
+#include "rotation.hpp"
 
 long load_particles(vector<tracer> *t)
 {
@@ -9,39 +10,91 @@ long fake_particles(vector<tracer> *t)
 {
   FILE *fp;
   char fname[200];
-  long n_groups = 2;
-  long n_per_group = 1000;
+  long n_groups = 100;
+  long n_per_group = 100;
   long ntd = n_groups * n_per_group;
 
   tracer t_in;
 
   long k=0;
+  long kk=0;
 
-  float xc[2] = {-1.,1.};
-  float yc[2] = {-1.,1.};
-  float zc[2] = {-1.,1.};
-  float h = 0.05;
+  //float xc[3] = {-1.,1.,0.};
+  //float yc[3] = {-1.,1.,1.};
+  //float zc[3] = {-1.,1.,0.};
+  double tx[3];
+  float xc, yc, zc;
+  float h = 0.025;
+  float theta;
+  float r;
+  float Mach = 5.0;
+  double a,b,c;
+  double *txr;
 
+  Rotation R;
 
   for(long i=0;i<n_groups;i++)
+  {
+    a = rng_uniform(0.,360.);
+    b = rng_uniform(0.,360.);
+    c = rng_uniform(0.,360.);
+
+    printf("a %e b %e c %e\n",a,b,c);
+    R.SetAlpha(a);
+    R.SetBeta(b);
+    R.SetTheta(c);
+
+    R.ShowRx();
+    R.ShowRy();
+    R.ShowRz();
+
+    //exit(0);
+
+
+    xc = rng_uniform(0,1.);
+    yc = rng_uniform(0,1.);
+    zc = rng_uniform(0,1.);
     for(long j=0;j<n_per_group;j++)
     {
       tin.id = k;
-      tin.d = 1.0;
-      tin.x[0] = xc[i]; 
-      tin.x[1] = yc[i]; 
-      tin.x[2] = zc[i]; 
+      
+      //tin.x[0] = xc[i]; 
+      //tin.x[1] = yc[i]; 
+      //tin.x[2] = zc[i];
+
+
+
       tin.v[0] = 0.0;
       tin.v[1] = 0.0;
       tin.v[2] = 0.0;
 
-      tin.x[0] += rng_exponential(h);
-      tin.x[1] += rng_gaussian(0.0,1.0);
-      tin.x[2] += rng_gaussian(0.0,1.0);
+      tx[0] = rng_exponential(h);
+      r = rng_exponential(Mach*h);
+      theta = rng_uniform(0.,2.*M_PI);
+      tx[1] = r*cos(theta);
+      tx[2] = r*sin(theta);
 
-      tin.x[0] += rng_exponential(h);
-      tin.x[1] += rng_gaussian(0.0,1.0);
-      tin.x[2] += rng_gaussian(0.0,1.0);
+      tin.d = 1.0*exp(-1.*r/(Mach*h))*exp(-1.0*tx[0]/h);
+
+      //rotate in 3-d
+      txr = R.ApplyRotationZYX(tx);
+
+      //printf("txr %e %e %e\n",txr[0],txr[1],txr[2]);
+
+
+      //translate
+      txr[0] += xc;
+      txr[1] += yc;
+      txr[2] += zc;
+      for(kk=0;kk<3;kk++)
+        tin.x[kk] = txr[kk]; 
+
+      free(txr);
+
+      //tin.x[0] += rng_exponential(h);
+      //tin.x[0] += rng_gaussian(0.0,1.0);
+      //tin.x[1] += rng_gaussian(0.0,1.0);
+      //tin.x[2] += rng_gaussian(0.0,1.0);
 
 
       //data[i][k] = rng_gaussian(0.0,1.0);
@@ -57,6 +110,7 @@ long fake_particles(vector<tracer> *t)
       //advance k
       k++;
     }
+  }
 
 
       //save data to file
