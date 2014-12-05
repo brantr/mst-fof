@@ -1,3 +1,7 @@
+fdata = 'fake_shocks.dat'
+
+fs = read_fake_shocks(fdata,n_fs)
+
 ss = 0.7
 
 fdata = "mst.0000.dat"
@@ -42,6 +46,8 @@ for i=1,n-1 do begin
   gsize(k) = gsize(k) + 1
   grank(ei(i)) = k
 endfor
+
+gcolor = 255.0*randomu(120933,ngroups)
 
 fdata = "st.0000.dat"
 openr,1,fdata
@@ -137,16 +143,18 @@ for i=0,n-1 do begin
 	yy(1) = y(2,i)
 	;oplot,xx,yy,color = (255.-40.)*float(i)/float(n-1)+40., thick=3
   if ngroups gt 1 then begin
-    cc =  (255.-40.)*(grank(i)-min(grank))/(max(grank)-min(grank))+40.
+    ;cc =  (255.-40.)*(grank(i)-min(grank))/(max(grank)-min(grank))+40.
   endif else begin
     cc = 255
   endelse
+  cc = gcolor(grank(i))
+
   oplot,xx,yy,color =cc, thick=3
 
 endfor
 loadct,0,/silent
-oplot,x(1,*),x(2,*),psym=8,symsize=ss
-oplot,y(1,*),y(2,*),psym=8,symsize=ss
+;oplot,x(1,*),x(2,*),psym=8,symsize=ss
+;oplot,y(1,*),y(2,*),psym=8,symsize=ss
 
 
 window,0,xsize=600,ysize=600
@@ -172,6 +180,9 @@ for i=0,n-1 do begin
   endif else begin
     cc = 255
   endelse
+     cc = gcolor(grank(i))
+
+
   oplot,xx,yy,color =cc, thick=3
 
 endfor
@@ -198,12 +209,13 @@ for i=0,n-1 do begin
   yy(0) = x(2,i)
   yy(1) = y(2,i)
   ;oplot,xx,yy,color = (255.-40.)*float(i)/float(n-1)+40., thick=3
-  if ngroups gt 1 then begin
-    cc =  (255.-40.)*(grank(i)-min(grank))/(max(grank)-min(grank))+40.
-  endif else begin
-    cc = 255
-  endelse
-  oplot,xx,yy,color =cc, thick=3
+  ;if ngroups gt 1 then begin
+  ;  cc =  (255.-40.)*(grank(i)-min(grank))/(max(grank)-min(grank))+40.
+  ;endif else begin
+  ;  cc = 255
+  ;endelse
+  cc = gcolor(grank(i))
+  ;oplot,xx,yy,color =cc, thick=3
 
 endfor
 loadct,0,/silent

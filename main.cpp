@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	int dim = 3;
 	int nngb = 20;
 	//int nngb = 100;
-	float bsq = 0.01;
+	float bsq = 0.1;
 	double t_a, t_b;
 
 	char fdir_out[200];
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
 	//float V = pow(3.0,3);
 	//bsq = pow( V/n, 2./3.);
-	bsq = 0.001;
+	bsq = 10.0;
 
 	//print some info to screen
 	printf("n = %ld, ntd = %ld, dim = %d, bsq = %e\n",n,tv.size(),dim,bsq);

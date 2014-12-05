@@ -2,6 +2,19 @@
 #include "rng.h"
 #include "rotation.hpp"
 
+struct fake_shock
+{
+  int id;
+  int n;
+  float x[3];
+  float theta[3];
+  float Sigma;
+  float d;
+  float h;
+  float dmax;
+  int idmax;
+};
+
 long load_particles(vector<tracer> *t)
 {
   return fake_particles(t);
@@ -10,9 +23,10 @@ long fake_particles(vector<tracer> *t)
 {
   FILE *fp;
   char fname[200];
-  long n_groups = 100;
-  long n_per_group = 100;
+  long n_groups = 1;
+  long n_per_group = 1000;
   long ntd = n_groups * n_per_group;
+  fake_shock *fs;
 
   tracer t_in;
 
@@ -24,36 +38,70 @@ long fake_particles(vector<tracer> *t)
   //float zc[3] = {-1.,1.,0.};
   double tx[3];
   float xc, yc, zc;
-  float h = 0.025;
+  float Sigma;
+  float h;
   float theta;
   float r;
   float Mach = 5.0;
   double a,b,c;
   double *txr;
+  float density;
+  float dmax;
+  int idmax;
 
   Rotation R;
 
+  fs = (struct fake_shock *) malloc(n_groups*sizeof(fake_shock));
   for(long i=0;i<n_groups;i++)
   {
-    a = rng_uniform(0.,360.);
-    b = rng_uniform(0.,360.);
-    c = rng_uniform(0.,360.);
 
-    printf("a %e b %e c %e\n",a,b,c);
+    a = 0.0;
+    b = 0.0;
+    c = 0.0;
+    //a = rng_uniform(0.,360.);
+    //b = rng_uniform(0.,360.);
+    //c = rng_uniform(0.,360.);
+
+    fs[i].theta[0] = a;
+    fs[i].theta[1] = b;
+    fs[i].theta[2] = c;
+
+
+    //printf("a %e b %e c %e\n",a,b,c);
     R.SetAlpha(a);
     R.SetBeta(b);
     R.SetTheta(c);
 
-    R.ShowRx();
-    R.ShowRy();
-    R.ShowRz();
+    //R.ShowRx();
+    //R.ShowRy();
+    //R.ShowRz();
 
     //exit(0);
 
+    xc = 0.5;
+    yc = 0.5;
+    zc = 0.5;
+    //xc = rng_uniform(0,1.);
+    //yc = rng_uniform(0,1.);
+    //zc = rng_uniform(0,1.);
 
-    xc = rng_uniform(0,1.);
-    yc = rng_uniform(0,1.);
-    zc = rng_uniform(0,1.);
+    fs[i].x[0] = xc;
+    fs[i].x[1] = yc;
+    fs[i].x[2] = zc;
+
+    fs[i].id = i;
+    fs[i].n  = n_per_group;
+
+    density = 1.0 + rng_exponential(1.0);
+
+
+    Sigma = 0.04 + 0.006*density;
+    h = Sigma/density;
+    fs[i].d = density;
+    fs[i].h = h;
+    fs[i].Sigma = Sigma;   
+
+    dmax = 0.0;
     for(long j=0;j<n_per_group;j++)
     {
       tin.id = k;
@@ -68,13 +116,21 @@ long fake_particles(vector<tracer> *t)
       tin.v[1] = 0.0;
       tin.v[2] = 0.0;
 
+
+
       tx[0] = rng_exponential(h);
-      r = rng_exponential(Mach*h);
+      r = 0.1*rng_exponential(Mach*h); //norm to 1, such that 1./h * exp(-x/h)
       theta = rng_uniform(0.,2.*M_PI);
       tx[1] = r*cos(theta);
       tx[2] = r*sin(theta);
 
-      tin.d = 1.0*exp(-1.*r/(Mach*h))*exp(-1.0*tx[0]/h);
+      tin.d = density*exp(-1.*r/(Mach*h))*exp(-1.0*tx[0]/h);
+
+      if(tin.d>dmax)
+      {
+        dmax  = tin.d;
+        idmax = k;
+      }
 
       //rotate in 3-d
       txr = R.ApplyRotationZYX(tx);
@@ -110,6 +166,8 @@ long fake_particles(vector<tracer> *t)
       //advance k
       k++;
     }
+    fs[i].dmax = dmax;
+    fs[i].idmax = idmax;
   }
 
 
@@ -131,6 +189,15 @@ long fake_particles(vector<tracer> *t)
 
   }
   fclose(fp);
+
+
+  sprintf(fname,"fake_shocks.dat");
+  fp = fopen(fname,"w");
+  fwrite(&n_groups,1,sizeof(int),fp);
+  fwrite(&fs[0],n_groups,sizeof(fake_shock),fp);
+  fclose(fp);
+
+  free(fs);
 
   //return number of particles
   return ntd;
