@@ -36,7 +36,7 @@ void find_fof_mst(array2dfloat vertex_data, float bsq, float dthresh, char fdir_
   //in each group, and setting the group peak to the 
   //densest particle
 
-  //refine_fof_groups(ntd);
+  refine_fof_groups(ntd);
 
   //Write to the MST file
 
