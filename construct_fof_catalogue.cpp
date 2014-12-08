@@ -1,6 +1,6 @@
+#include "make_fof_catalogue.hpp"
 
-
-void refine_fof_groups(long ntd)
+void make_fof_catalogue(long ntd)
 {
   //remember the tracer list sorted by density
   td = tv;

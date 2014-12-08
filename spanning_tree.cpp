@@ -409,6 +409,9 @@ void refine_fof_groups(long ntd)
     //set the peak index for the tracer
     tv[tt].peak_index = vll[tt].head->pid;
   }
+
+  //should have an mst ordered by edge length
+  sort( mst.begin(), mst.end(), edge_comparison); 
 }
 
 /* \fn void destroy_spanning_tree(void)
