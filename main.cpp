@@ -6,6 +6,7 @@
 #include "load_particles.hpp"
 #include "comparison_functions.hpp"
 #include "assign_peak.hpp"
+#include "construct_fof_catalogue.hpp"
 #include "rng.h"
 #include "timer.h"
 
@@ -56,10 +57,21 @@ int main(int argc, char **argv)
 	printf("Time for tree build = %es.\n",t_b-t_a);
 
 
-	//produce fof catalogues from mst
+	//define output directory
 	sprintf(fdir_out,"./");
+
+	//find fof groups from minimal spanning tree
 	find_fof_mst(data, bsq, 0.0, fdir_out, 0, 0);
 
+	//construct fof catalog from fof groups
+	construct_fof_catalogue(n);
+
+
+	/*delete the tree*/
+	delete tree;
+
+	//free tracer particle vector
+	data.resize(extents[1][1]);
 
 	//end program
 	return 0;

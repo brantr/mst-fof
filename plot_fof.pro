@@ -2,6 +2,13 @@ fdata = 'fake_shocks.dat'
 
 fs = read_fake_shocks(fdata,n_fs)
 
+fdata = 'fof_data.dat'
+nfp = read_fof_catalogue_data(fdata,ngfp,dfp,xfp,yfp,zfp,vxfp,vyfp,vzfp,lfp)
+
+fdata = 'fof_list.dat'
+nfg = read_fof_catalogue_list(fdata, lg, og, dg, idg)
+
+
 ss = 0.7
 
 fdata = "mst.0000.dat"

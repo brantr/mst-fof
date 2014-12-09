@@ -23,7 +23,7 @@ long fake_particles(vector<tracer> *t)
 {
   FILE *fp;
   char fname[200];
-  long n_groups = 1;
+  long n_groups = 100;
   long n_per_group = 1000;
   long ntd = n_groups * n_per_group;
   fake_shock *fs;
@@ -55,12 +55,12 @@ long fake_particles(vector<tracer> *t)
   for(long i=0;i<n_groups;i++)
   {
 
-    a = 0.0;
-    b = 0.0;
-    c = 0.0;
-    //a = rng_uniform(0.,360.);
-    //b = rng_uniform(0.,360.);
-    //c = rng_uniform(0.,360.);
+    //a = 0.0;
+    //b = 0.0;
+    //c = 0.0;
+    a = rng_uniform(0.,360.);
+    b = rng_uniform(0.,360.);
+    c = rng_uniform(0.,360.);
 
     fs[i].theta[0] = a;
     fs[i].theta[1] = b;
@@ -78,12 +78,12 @@ long fake_particles(vector<tracer> *t)
 
     //exit(0);
 
-    xc = 0.5;
-    yc = 0.5;
-    zc = 0.5;
-    //xc = rng_uniform(0,1.);
-    //yc = rng_uniform(0,1.);
-    //zc = rng_uniform(0,1.);
+    //xc = 0.5;
+    //yc = 0.5;
+    //zc = 0.5;
+    xc = rng_uniform(0,1.);
+    yc = rng_uniform(0,1.);
+    zc = rng_uniform(0,1.);
 
     fs[i].x[0] = xc;
     fs[i].x[1] = yc;

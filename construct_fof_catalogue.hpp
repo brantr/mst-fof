@@ -1,4 +1,4 @@
-#ifndef REFINE_FOF_GROUPS_H
-#define REFINE_FOF_GROUPS_H
-void refine_fof_groups(long ntd);
-#endif /*REFINE_FOF_GROUPS_H*/
+#ifndef CONSTRUCT_FOF_CATALOGUE_H
+#define CONSTRUCT_FOF_CATALOGUE_H
+void construct_fof_catalogue(long ntd);
+#endif /*CONSTRUCT_FOF_CATALOGUE_H*/

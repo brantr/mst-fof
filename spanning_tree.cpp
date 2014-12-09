@@ -411,7 +411,7 @@ void refine_fof_groups(long ntd)
   }
 
   //should have an mst ordered by edge length
-  sort( mst.begin(), mst.end(), edge_comparison); 
+  sort( mst.begin(), mst.end(), edge_length_comparison); 
 }
 
 /* \fn void destroy_spanning_tree(void)

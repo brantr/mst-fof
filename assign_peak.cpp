@@ -46,7 +46,7 @@ void find_fof_mst(array2dfloat vertex_data, float bsq, float dthresh, char fdir_
   
   destroy_spanning_tree();
 
-
+  //matches find_fof_mst
 }
 
 //write a spanning tree to file
