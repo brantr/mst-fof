@@ -7,7 +7,7 @@
 #include<gsl/gsl_spline.h>
 #include<gsl/gsl_statistics.h>
 #include<time.h>
-#include"routines.h"
+#include"routines.hpp"
 
 
 /*! \fn double double_log10_index(int i, int n, double xmin, double xmax)
