@@ -37,6 +37,12 @@ void write_fof_data(char fname[], vector<shock> s, vector<tracer> t)
   float *vypeak;
   float *vzpeak;
   long  *lpeak;
+
+  if(s.size()==0)
+  {
+    write_null_fof_data(fname);
+    return;
+  }
   
   //write snap peak details
   if(!(fp_dat = fopen(fname,"w")))
@@ -111,7 +117,7 @@ void write_fof_data(char fname[], vector<shock> s, vector<tracer> t)
   fclose(fp_dat);
 }
 
-void write_null_fof_list(char fname[], int isnap, int nfiles)
+void write_null_fof_list(char fname[])
 {
 
   FILE  *fp_list;
@@ -124,8 +130,8 @@ void write_null_fof_list(char fname[], int isnap, int nfiles)
   float *b_max;
   int isub;
 
-  for(isub=0;isub<nfiles;isub++)
-  {
+  //for(isub=0;isub<nfiles;isub++)
+  //{
 
     //write the peak list to file
     if(!(fp_list = fopen(fname,"w")))
@@ -137,7 +143,7 @@ void write_null_fof_list(char fname[], int isnap, int nfiles)
     n = 0;
     fwrite(&n,1,sizeof(int),fp_list);
     fclose(fp_list);
-  }
+  //}
 }
 
 void write_fof_list(char fname[], vector<shock> s)
@@ -150,6 +156,12 @@ void write_fof_list(char fname[], vector<shock> s)
   long  *id;
   float *b_min;
   float *b_max;
+
+  if(s.size()==0)
+  {
+    write_null_fof_list(fname);
+    return;
+  }
 
   //write the peak list to file
   if(!(fp_list = fopen(fname,"w")))

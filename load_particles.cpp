@@ -15,16 +15,16 @@ struct fake_shock
   int idmax;
 };
 
-long load_particles(vector<tracer> *t)
+long load_particles(vector<tracer> *t, long n_groups, long n_per_group)
 {
-  return fake_particles(t);
+  return fake_particles(t,n_groups,n_per_group);
 }
-long fake_particles(vector<tracer> *t)
+long fake_particles(vector<tracer> *t, long n_groups, long n_per_group)
 {
   FILE *fp;
   char fname[200];
-  long n_groups = 100;
-  long n_per_group = 1000;
+  //long n_groups = 100;
+  //long n_per_group = 1000;
   long ntd = n_groups * n_per_group;
   fake_shock *fs;
 
@@ -198,6 +198,8 @@ long fake_particles(vector<tracer> *t)
   fclose(fp);
 
   free(fs);
+
+  printf("%ld\t%ld\n",n_groups,n_groups*n_per_group);
 
   //return number of particles
   return ntd;

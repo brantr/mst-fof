@@ -24,21 +24,30 @@ int main(int argc, char **argv)
 	int dim = 3;
 	int nngb = 20;
 	//int nngb = 100;
-	float bsq = 0.1;
+	float bsq = 1.0e-4;
 	double t_a, t_b;
+  long n_groups = 100;
+  long n_per_group = 1000;
 
 	char fdir_out[200];
 
+  //adjust bsq if argc==2
+  if(argc>=2)
+    bsq = pow(atof(argv[1]),2);
+
+  printf("%15.14e\n",bsq);
+
+  //load groups
+  if(argc>=3)
+    n_groups = atol(argv[2]);
+  if(argc>=4)
+    n_per_group = atol(argv[3]);
 
 	//load the particles
-	n = load_particles(&tv);
-
-	//float V = pow(3.0,3);
-	//bsq = pow( V/n, 2./3.);
-	bsq = 10.0;
+	n = load_particles(&tv,n_groups,n_per_group);
 
 	//print some info to screen
-	printf("n = %ld, ntd = %ld, dim = %d, bsq = %e\n",n,tv.size(),dim,bsq);
+	//printf("n = %ld, ntd = %ld, dim = %d, bsq = %e\n",n,tv.size(),dim,bsq);
 
 	/*sort tracer particles by density*/ 
   std::sort( tv.begin(), tv.end(), tracer_density_comparison);
@@ -54,7 +63,7 @@ int main(int argc, char **argv)
 	t_a = timer();
 	tree = new kdtree2(data,true);
 	t_b = timer();
-	printf("Time for tree build = %es.\n",t_b-t_a);
+	//printf("Time for tree build = %es.\n",t_b-t_a);
 
 
 	//define output directory

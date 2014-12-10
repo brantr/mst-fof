@@ -2,6 +2,7 @@
 #include "shock_data_types.hpp"
 #include "comparison_functions.hpp"
 #include "write_fof_catalogues.hpp"
+#include "limit_fof_group_size.hpp"
 
 void construct_fof_catalogue(long ntd)
 {
@@ -15,6 +16,9 @@ void construct_fof_catalogue(long ntd)
   long ip, ioff;
 
   vector<shock> svA;      //shock -- the groups we are trying to find
+
+  //minimum group size
+  int n_limit = 10;
 
   //remember the tracer list sorted by density
   td = tv;
@@ -114,6 +118,12 @@ void construct_fof_catalogue(long ntd)
     }
     ioff+=svA[i].l;
   }
+
+  //remove small groups
+  n_peak = limit_fof_group_size(n_limit, &svA, &tv);
+
+  //printf("n_peak = %ld\n",n_peak);
+  printf("%ld\t%ld\n",n_peak,tv.size());
 
   //output the peak offsets and lengths for info
   //for(int il=0;il<svA.size();il++)

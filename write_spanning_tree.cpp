@@ -18,7 +18,7 @@ void write_spanning_tree(char fname[200], vector<edge> st)
   //remember the number of edges in the ST
   n_edge = st.size();
 
-  printf("st.size() = %ld\n",n_edge);
+  //printf("st.size() = %ld\n",n_edge);
 
   //write the number of edges in the tree to file
   fwrite(&n_edge,1,sizeof(long),fp);
