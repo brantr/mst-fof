@@ -8,9 +8,13 @@ class Rotation
 		double beta;	//angle about y-direction
 		double theta;	//angle about z-direction
 
-		void Rotation(void);
-		void ~Rotation(void);
-		void Rotation(double alpha_in, double beta_in, double theta_in);
+		Rotation(void);
+		Rotation(double alpha_in, double beta_in, double theta_in);
+		~Rotation(void);
+
+		void ShowRx(void);
+		void ShowRy(void);
+		void ShowRz(void);
 
 		double **R_x;
 		double **R_y;
