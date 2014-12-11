@@ -319,6 +319,10 @@ void refine_fof_groups(long ntd)
   float dmax  = 0; //highest density in group
   long  idmax = 0; //index of particle with largest density
 
+  //if the MST is null, then we don't need to refine anything
+  if(mst.size()==0)
+    return;
+
   //first, sort by increasing peak index
   sort( mst.begin(), mst.end(), edge_peak_index_comparison); 
 
